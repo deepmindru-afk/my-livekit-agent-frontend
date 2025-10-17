@@ -1,11 +1,12 @@
 'use client';
-import { type AgentState, type TrackReference } from '@livekit/components-react';
-import { cn } from '@/lib/utils';
+
+import { useEffect, useState } from 'react';
 import { Waveform } from 'ldrs/react';
 import 'ldrs/react/Waveform.css';
-import { useState, useEffect } from 'react';
-import { THEME_STORAGE_KEY, THEME_MEDIA_QUERY } from '@/lib/utils';
+import { type AgentState, type TrackReference } from '@livekit/components-react';
 import type { ThemeMode } from '@/lib/types';
+import { cn } from '@/lib/utils';
+import { THEME_MEDIA_QUERY, THEME_STORAGE_KEY } from '@/lib/utils';
 
 interface AgentAudioTileProps {
   state: AgentState;
@@ -21,25 +22,31 @@ export const AgentTile = ({
 
   useEffect(() => {
     const storedTheme = (localStorage.getItem(THEME_STORAGE_KEY) as ThemeMode) ?? 'system';
-    const effTheme = storedTheme === 'system'
-      ? window.matchMedia(THEME_MEDIA_QUERY).matches ? 'dark' : 'light'
-      : (storedTheme as 'light' | 'dark');
+    const effTheme =
+      storedTheme === 'system'
+        ? window.matchMedia(THEME_MEDIA_QUERY).matches
+          ? 'dark'
+          : 'light'
+        : (storedTheme as 'light' | 'dark');
     setEffectiveTheme(effTheme);
 
     const handleStorageChange = (e: Event) => {
-        let newStoredTheme: ThemeMode | null = null;
-        if (e instanceof StorageEvent && e.key === THEME_STORAGE_KEY) {
-            newStoredTheme = e.newValue as ThemeMode;
-        } else if (e instanceof CustomEvent && (e as CustomEvent).detail?.key === THEME_STORAGE_KEY) {
-            newStoredTheme = (e as CustomEvent).detail.newValue as ThemeMode;
-        }
-        
-        if (newStoredTheme) {
-            const newEffTheme = newStoredTheme === 'system'
-                ? window.matchMedia(THEME_MEDIA_QUERY).matches ? 'dark' : 'light'
-                : (newStoredTheme as 'light' | 'dark');
-            setEffectiveTheme(newEffTheme);
-        }
+      let newStoredTheme: ThemeMode | null = null;
+      if (e instanceof StorageEvent && e.key === THEME_STORAGE_KEY) {
+        newStoredTheme = e.newValue as ThemeMode;
+      } else if (e instanceof CustomEvent && (e as CustomEvent).detail?.key === THEME_STORAGE_KEY) {
+        newStoredTheme = (e as CustomEvent).detail.newValue as ThemeMode;
+      }
+
+      if (newStoredTheme) {
+        const newEffTheme =
+          newStoredTheme === 'system'
+            ? window.matchMedia(THEME_MEDIA_QUERY).matches
+              ? 'dark'
+              : 'light'
+            : (newStoredTheme as 'light' | 'dark');
+        setEffectiveTheme(newEffTheme);
+      }
     };
 
     window.addEventListener('storage', handleStorageChange);

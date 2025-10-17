@@ -28,7 +28,11 @@ export const ChatEntry = ({
   const messageOrigin = isUser ? 'remote' : 'local';
 
   return (
-    <li data-lk-message-origin={messageOrigin} className={cn('group list-none', className)} {...props}>
+    <li
+      data-lk-message-origin={messageOrigin}
+      className={cn('group list-none', className)}
+      {...props}
+    >
       {message}
     </li>
   );

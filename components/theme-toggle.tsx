@@ -56,9 +56,12 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
     const storedTheme = (localStorage.getItem(THEME_STORAGE_KEY) as ThemeMode) ?? 'system';
     setTheme(storedTheme);
 
-    const effTheme = storedTheme === 'system'
-      ? window.matchMedia(THEME_MEDIA_QUERY).matches ? 'dark' : 'light'
-      : (storedTheme as 'light' | 'dark');
+    const effTheme =
+      storedTheme === 'system'
+        ? window.matchMedia(THEME_MEDIA_QUERY).matches
+          ? 'dark'
+          : 'light'
+        : (storedTheme as 'light' | 'dark');
 
     setEffectiveTheme(effTheme);
   }, []);
@@ -70,18 +73,24 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
         const newStoredTheme = e.newValue as ThemeMode;
         if (newStoredTheme) {
           setTheme(newStoredTheme);
-          const newEffTheme = newStoredTheme === 'system'
-            ? window.matchMedia(THEME_MEDIA_QUERY).matches ? 'dark' : 'light'
-            : (newStoredTheme as 'light' | 'dark');
+          const newEffTheme =
+            newStoredTheme === 'system'
+              ? window.matchMedia(THEME_MEDIA_QUERY).matches
+                ? 'dark'
+                : 'light'
+              : (newStoredTheme as 'light' | 'dark');
           setEffectiveTheme(newEffTheme);
         }
       } else if (e instanceof CustomEvent && (e as CustomEvent).detail?.key === THEME_STORAGE_KEY) {
         const newStoredTheme = e.detail.newValue as ThemeMode;
         if (newStoredTheme) {
           setTheme(newStoredTheme);
-          const newEffTheme = newStoredTheme === 'system'
-            ? window.matchMedia(THEME_MEDIA_QUERY).matches ? 'dark' : 'light'
-            : (newStoredTheme as 'light' | 'dark');
+          const newEffTheme =
+            newStoredTheme === 'system'
+              ? window.matchMedia(THEME_MEDIA_QUERY).matches
+                ? 'dark'
+                : 'light'
+              : (newStoredTheme as 'light' | 'dark');
           setEffectiveTheme(newEffTheme);
         }
       }
@@ -100,16 +109,21 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
     applyTheme(newStoredTheme);
     setTheme(newStoredTheme);
 
-    const newEffTheme = newStoredTheme === 'system'
-      ? window.matchMedia(THEME_MEDIA_QUERY).matches ? 'dark' : 'light'
-      : (newStoredTheme as 'light' | 'dark');
+    const newEffTheme =
+      newStoredTheme === 'system'
+        ? window.matchMedia(THEME_MEDIA_QUERY).matches
+          ? 'dark'
+          : 'light'
+        : (newStoredTheme as 'light' | 'dark');
 
     setEffectiveTheme(newEffTheme);
 
     // Dispatch custom event for same-tab sync (e.g., during navigation)
-    window.dispatchEvent(new CustomEvent('storage-custom', {
-      detail: { key: THEME_STORAGE_KEY, newValue: newStoredTheme }
-    }));
+    window.dispatchEvent(
+      new CustomEvent('storage-custom', {
+        detail: { key: THEME_STORAGE_KEY, newValue: newStoredTheme },
+      })
+    );
   }
 
   const toggleTheme = () => {
@@ -126,7 +140,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
         weight="bold"
         className={cn(
           'transition-opacity duration-200 ease-in-out',
-          isDark && 'opacity-50 text-muted-foreground'
+          isDark && 'text-muted-foreground opacity-50'
         )}
       />
       <div
@@ -134,16 +148,16 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
         aria-checked={isDark}
         onClick={toggleTheme}
         className={cn(
-          'group relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer items-center rounded-full bg-foreground transition-colors focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background'
+          'group bg-foreground focus-visible:ring-ring focus-visible:ring-offset-background relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer items-center rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none'
         )}
         aria-label="Toggle dark mode"
       >
         <span
           className={cn(
-            'pointer-events-none absolute left-0.5 top-0.5 inline-block h-5 w-5 transform rounded-full bg-background shadow-lg ring-0 transition-transform duration-200 ease-in-out'
+            'bg-background pointer-events-none absolute top-0.5 left-0.5 inline-block h-5 w-5 transform rounded-full shadow-lg ring-0 transition-transform duration-200 ease-in-out'
           )}
           style={{
-            transform: isDark ? 'translateX(1.25rem)' : 'translateX(0)'
+            transform: isDark ? 'translateX(1.25rem)' : 'translateX(0)',
           }}
         />
       </div>
@@ -152,7 +166,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
         weight="bold"
         className={cn(
           'transition-opacity duration-200 ease-in-out',
-          !isDark && 'opacity-50 text-muted-foreground'
+          !isDark && 'text-muted-foreground opacity-50'
         )}
       />
     </div>

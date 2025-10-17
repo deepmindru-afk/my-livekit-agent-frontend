@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { useCallback, useRef, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Track } from 'livekit-client';
 import { BarVisualizer, useRemoteParticipants, useVoiceAssistant } from '@livekit/components-react';
 import { ChatTextIcon, PhoneDisconnectIcon } from '@phosphor-icons/react/dist/ssr';
@@ -83,7 +83,7 @@ export function AgentControlBar({
       setInitialUnmuteDone(true);
     }
   }, [isAvatarVisible, initialUnmuteDone, microphoneToggle]);
-  
+
   const isInputDisabled = !chatOpen || !isAgentAvailable || isSendingMessage;
 
   const handleSendMessage = async (message: string) => {
@@ -119,12 +119,14 @@ export function AgentControlBar({
       aria-label="Voice assistant controls"
       style={{ width: chatOpen ? `max(350px, min(${inputWidth + 150}px, 500px))` : '300px' }}
       className={cn(
-        'bg-background border-black/20 dark:border-white/10 flex flex-col rounded-[31px] border p-3 drop-shadow-md/3 mx-auto transition-all duration-300',
+        'bg-background mx-auto flex flex-col rounded-[31px] border border-black/20 p-3 drop-shadow-md/3 transition-all duration-300 dark:border-white/10',
         className
       )}
       {...props}
     >
-      <span ref={hiddenTextRef} className="invisible absolute whitespace-pre">{chatMessage}</span>
+      <span ref={hiddenTextRef} className="invisible absolute whitespace-pre">
+        {chatMessage}
+      </span>
       {capabilities.supportsChatInput && (
         <div
           inert={!chatOpen}

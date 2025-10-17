@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import { Track } from 'livekit-client';
 import { AnimatePresence, motion } from 'framer-motion';
+import { Track } from 'livekit-client';
 import {
   type TrackReference,
   useLocalParticipant,
@@ -119,34 +119,42 @@ export function MediaTiles({ chatOpen }: MediaTilesProps) {
   const isAvatar = agentVideoTrack !== undefined;
 
   return (
-    <div className={cn(
-      'pointer-events-none',
-      // Mobile: Top center when chat open, fullscreen when closed
-      // Desktop: Left center when chat open, fullscreen when closed
-      chatOpen
-        ? 'fixed top-28 left-1/2 -translate-x-1/2 z-50 xl:left-8 xl:top-1/2 xl:-translate-y-1/2 xl:translate-x-0'
-        : 'fixed inset-x-0 top-8 bottom-32 z-50 md:top-12 md:bottom-40'
-    )}>
-      <div className={cn(
-        'relative h-full w-full',
-        chatOpen ? 'px-4 mx-0 max-w-none md:px-0' : 'px-4 mx-auto max-w-2xl md:px-0'
-      )}>
-        <div className={cn(
-          // Mobile: single column layout with tighter spacing
-          // Desktop: grid layout
-          chatOpen 
-            ? 'flex flex-col items-center gap-2 md:grid md:gap-x-2 md:place-content-center md:grid-cols-[1fr_1fr] md:grid-rows-[90px_1fr_90px]'
-            : classNames.grid
-        )}>
+    <div
+      className={cn(
+        'pointer-events-none',
+        // Mobile: Top center when chat open, fullscreen when closed
+        // Desktop: Left center when chat open, fullscreen when closed
+        chatOpen
+          ? 'fixed top-28 left-1/2 z-50 -translate-x-1/2 xl:top-1/2 xl:left-8 xl:translate-x-0 xl:-translate-y-1/2'
+          : 'fixed inset-x-0 top-8 bottom-32 z-50 md:top-12 md:bottom-40'
+      )}
+    >
+      <div
+        className={cn(
+          'relative h-full w-full',
+          chatOpen ? 'mx-0 max-w-none px-4 md:px-0' : 'mx-auto max-w-2xl px-4 md:px-0'
+        )}
+      >
+        <div
+          className={cn(
+            // Mobile: single column layout with tighter spacing
+            // Desktop: grid layout
+            chatOpen
+              ? 'flex flex-col items-center gap-2 md:grid md:grid-cols-[1fr_1fr] md:grid-rows-[90px_1fr_90px] md:place-content-center md:gap-x-2'
+              : classNames.grid
+          )}
+        >
           {/* agent */}
           <div
             className={cn([
-              chatOpen 
-                ? 'flex justify-center w-full md:grid' 
-                : 'grid',
+              chatOpen ? 'flex w-full justify-center md:grid' : 'grid',
               !chatOpen && classNames.agentChatClosed,
-              chatOpen && hasSecondTile && 'md:col-start-1 md:row-start-1 md:self-center md:justify-self-end',
-              chatOpen && !hasSecondTile && 'md:col-start-1 md:row-start-1 md:col-span-2 md:place-content-center',
+              chatOpen &&
+                hasSecondTile &&
+                'md:col-start-1 md:row-start-1 md:self-center md:justify-self-end',
+              chatOpen &&
+                !hasSecondTile &&
+                'md:col-span-2 md:col-start-1 md:row-start-1 md:place-content-center',
             ])}
           >
             <AnimatePresence mode="wait">
@@ -162,7 +170,7 @@ export function MediaTiles({ chatOpen }: MediaTilesProps) {
                   state={agentState}
                   audioTrack={agentAudioTrack}
                   className={cn(
-                    'overflow-hidden flex items-center justify-center',
+                    'flex items-center justify-center overflow-hidden',
                     chatOpen
                       ? 'aspect-square h-[140px] w-[140px] rounded-full md:h-[180px] md:w-[180px]'
                       : 'h-auto w-full rounded-lg'
@@ -181,15 +189,19 @@ export function MediaTiles({ chatOpen }: MediaTilesProps) {
                   videoTrack={agentVideoTrack}
                   chatOpen={chatOpen}
                   className={cn(
-                    'overflow-hidden flex items-center justify-center',
+                    'flex items-center justify-center overflow-hidden',
                     chatOpen
-                      ? 'aspect-square h-[140px] w-[140px] rounded-full [&>video]:object-cover md:h-[180px] md:w-[180px]'
+                      ? 'aspect-square h-[140px] w-[140px] rounded-full md:h-[180px] md:w-[180px] [&>video]:object-cover'
                       : 'h-auto w-full rounded-lg [&>video]:object-cover'
                   )}
-                  style={chatOpen ? {
-                    border: '3px solid rgba(139, 92, 246, 0.3)',
-                    boxShadow: '0 10px 30px rgba(139, 92, 246, 0.2)',
-                  } : undefined}
+                  style={
+                    chatOpen
+                      ? {
+                          border: '3px solid rgba(139, 92, 246, 0.3)',
+                          boxShadow: '0 10px 30px rgba(139, 92, 246, 0.2)',
+                        }
+                      : undefined
+                  }
                 />
               )}
             </AnimatePresence>
@@ -198,9 +210,7 @@ export function MediaTiles({ chatOpen }: MediaTilesProps) {
           {/* Second tile container */}
           <div
             className={cn([
-              chatOpen 
-                ? 'flex justify-center w-full md:grid' 
-                : 'grid',
+              chatOpen ? 'flex w-full justify-center md:grid' : 'grid',
               chatOpen && 'md:col-start-2 md:row-start-1 md:self-center md:justify-self-start',
               !chatOpen && classNames.secondTileChatClosed,
             ])}
@@ -219,9 +229,7 @@ export function MediaTiles({ chatOpen }: MediaTilesProps) {
                     delay: chatOpen ? 0 : 0.15,
                   }}
                   className={cn(
-                    chatOpen 
-                      ? 'h-[100px] w-[100px] rounded-lg md:h-[90px] md:w-auto' 
-                      : 'h-[90px]'
+                    chatOpen ? 'h-[100px] w-[100px] rounded-lg md:h-[90px] md:w-auto' : 'h-[90px]'
                   )}
                 />
               )}
@@ -238,8 +246,8 @@ export function MediaTiles({ chatOpen }: MediaTilesProps) {
                     delay: chatOpen ? 0 : 0.15,
                   }}
                   className={cn(
-                    chatOpen 
-                      ? 'h-[100px] w-full max-w-[200px] rounded-lg md:h-[90px] md:w-auto md:max-w-none' 
+                    chatOpen
+                      ? 'h-[100px] w-full max-w-[200px] rounded-lg md:h-[90px] md:w-auto md:max-w-none'
                       : 'h-[90px]'
                   )}
                 />

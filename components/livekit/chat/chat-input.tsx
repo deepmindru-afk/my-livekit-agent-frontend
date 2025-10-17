@@ -10,7 +10,14 @@ interface ChatInputProps extends Omit<React.HTMLAttributes<HTMLFormElement>, 'on
   onChange: (value: string) => void;
 }
 
-export function ChatInput({ onSend, className, disabled, value, onChange, ...props }: ChatInputProps) {
+export function ChatInput({
+  onSend,
+  className,
+  disabled,
+  value,
+  onChange,
+  ...props
+}: ChatInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -52,7 +59,7 @@ export function ChatInput({ onSend, className, disabled, value, onChange, ...pro
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={handleKeyDown}
         maxRows={5}
-        className="flex-1 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 bg-transparent resize-none placeholder:text-muted-foreground"
+        className="placeholder:text-muted-foreground flex-1 resize-none bg-transparent focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
       />
       <Button
         size="sm"
