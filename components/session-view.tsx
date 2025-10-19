@@ -36,6 +36,7 @@ export const SessionView = ({
   ref,
 }: React.ComponentProps<'div'> & SessionViewProps) => {
   const { state: agentState, videoTrack } = useVoiceAssistant();
+  const isAvatarVisible = !!videoTrack;
   const [chatOpen, setChatOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const { messages, send } = useChatAndTranscription();
@@ -254,87 +255,89 @@ export const SessionView = ({
       <div className="flex min-h-[100svh] flex-col px-4 pt-24 pb-32 sm:px-8 sm:pt-28 sm:pb-36 md:pt-32 md:pb-40 lg:pt-36 lg:pb-48">
         {/* Content Container */}
         <div className="mx-auto flex w-full max-w-7xl flex-1 flex-row items-center gap-6">
-          {/* Avatar on the Left - Centered with Chat */}
-          <div
-            className={cn(
-              'flex flex-col items-center justify-center transition-all duration-300 lg:w-1/5',
-              chatOpen ? 'lg:visible' : 'lg:w-full'
-            )}
-          >
+          {/* On smaller screens, this div will stack the avatar and chat vertically */}
+          <div className="flex w-full flex-col items-center justify-center gap-4 lg:w-auto lg:flex-row lg:items-start">
             <MediaTiles chatOpen={chatOpen} />
-          </div>
 
-          {/* Chat Panel - Fixed position above agent bar */}
-          <AnimatePresence>
-            {chatOpen && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3, ease: 'easeOut' }}
-                className="fixed bottom-36 left-1/2 z-40 flex w-[calc(100%-2rem)] -translate-x-1/2 flex-col rounded-lg border border-gray-200 bg-white shadow-lg sm:bottom-40 sm:w-[calc(100%-3rem)] md:bottom-44 md:w-4/5 lg:bottom-48 lg:w-3/5 dark:border-gray-700 dark:bg-gray-800"
-                style={{
-                  height: 'calc(100svh - 20rem)',
-                  maxHeight: 'calc(100svh - 24rem)',
-                }}
-              >
-                <div ref={chatRef} className="flex-1 space-y-4 overflow-y-auto p-4">
-                  {messages.map((message: ReceivedChatMessage) => (
-                    <div
-                      key={message.id}
-                      className={cn(
-                        'flex flex-col',
-                        message.from?.isLocal ? 'items-end' : 'items-start'
-                      )}
-                    >
+            {/* Chat Panel - Fixed position above agent bar */}
+            <AnimatePresence>
+              {chatOpen && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3, ease: 'easeOut' }}
+                  className={cn(
+                    'z-40 flex w-full flex-col rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800',
+                    // On larger screens, it's fixed to the bottom. On smaller screens, it's part of the flex layout.
+                    'lg:fixed lg:bottom-48 lg:left-1/2 lg:w-3/5 lg:-translate-x-1/2'
+                  )}
+                  style={{
+                    // Full viewport height minus top/bottom padding and avatar height on small screens
+                    height: 'calc(100svh - 16rem - 140px - 1rem)',
+                    maxHeight: 'calc(100svh - 20rem)',
+                  }}
+                >
+                  <div ref={chatRef} className="flex-1 space-y-4 overflow-y-auto p-4">
+                    {messages.map((message: ReceivedChatMessage) => (
                       <div
+                        key={message.id}
                         className={cn(
-                          'flex w-full flex-col gap-1',
+                          'flex flex-col',
                           message.from?.isLocal ? 'items-end' : 'items-start'
                         )}
                       >
-                        <span
-                          className={cn(
-                            'px-2 text-xs font-medium',
-                            message.from?.isLocal
-                              ? 'text-purple-700 dark:text-purple-300'
-                              : 'text-gray-700 dark:text-gray-300'
-                          )}
-                        >
-                          {message.from?.isLocal ? 'User' : 'Agent'}
-                        </span>
                         <div
                           className={cn(
-                            'max-w-[70%] rounded-lg px-4 py-2.5 text-sm',
+                            'flex w-full flex-col gap-1',
                             message.from?.isLocal
-                              ? 'bg-blue-500 text-white dark:bg-blue-600'
-                              : 'bg-green-100 text-green-900 dark:bg-green-900 dark:text-green-100'
+                              ? 'items-end'
+                              : 'items-start'
                           )}
                         >
-                          <ChatEntry entry={message} />
+                          <span
+                            className={cn(
+                              'px-2 text-xs font-medium',
+                              message.from?.isLocal
+                                ? 'text-purple-700 dark:text-purple-300'
+                                : 'text-gray-700 dark:text-gray-300'
+                            )}
+                          >
+                            {message.from?.isLocal ? 'User' : 'Agent'}
+                          </span>
+                          <div
+                            className={cn(
+                              'max-w-[70%] rounded-lg px-4 py-2.5 text-sm',
+                              message.from?.isLocal
+                                ? 'bg-blue-500 text-white dark:bg-blue-600'
+                                : 'bg-green-100 text-green-900 dark:bg-green-900 dark:text-green-100'
+                            )}
+                          >
+                            <ChatEntry entry={message} />
+                          </div>
                         </div>
+                        <span
+                          className={cn(
+                            'mt-1 font-mono text-xs text-gray-500 dark:text-gray-400',
+                            message.from?.isLocal ? 'mr-2' : 'ml-2'
+                          )}
+                        >
+                          {new Date(message.timestamp).toLocaleTimeString(undefined, {
+                            timeStyle: 'short',
+                          })}
+                        </span>
                       </div>
-                      <span
-                        className={cn(
-                          'mt-1 font-mono text-xs text-gray-500 dark:text-gray-400',
-                          message.from?.isLocal ? 'mr-2' : 'ml-2'
-                        )}
-                      >
-                        {new Date(message.timestamp).toLocaleTimeString(undefined, {
-                          timeStyle: 'short',
-                        })}
-                      </span>
-                    </div>
-                  ))}
-                  {messages.length === 0 && (
-                    <div className="flex h-full items-center justify-center text-gray-500 dark:text-gray-400">
-                      <p className="text-sm">Start a conversation...</p>
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                    ))}
+                    {messages.length === 0 && (
+                      <div className="flex h-full items-center justify-center text-gray-500 dark:text-gray-400">
+                        <p className="text-sm">Start a conversation...</p>
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </div>
 
@@ -361,19 +364,29 @@ export const SessionView = ({
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{
-                  opacity: sessionStarted && messages.length === 0 ? 1 : 0,
+                  opacity:
+                    sessionStarted &&
+                    messages.length === 0 && // Only show on first load
+                    !isAvatarVisible // Show until avatar is visible
+                      ? 1
+                      : 0,
                   transition: {
                     ease: 'easeIn',
-                    delay: messages.length > 0 ? 0 : 0.8,
+                    delay: messages.length > 0 ? 0 : 0.5,
                     duration: messages.length > 0 ? 0.2 : 0.5,
                   },
                 }}
                 aria-hidden={messages.length > 0}
-                className={cn(
+                className={cn([
                   'absolute inset-x-0 -top-8 text-center sm:-top-10 md:-top-12',
-                  sessionStarted && messages.length === 0 && 'pointer-events-none'
-                )}
-              ></motion.div>
+                  sessionStarted &&
+                    messages.length === 0 &&
+                    'pointer-events-none', // Keep it from being interactive
+                  'text-black dark:text-white',
+                ])}
+              >
+                <div>Please wait, while the agent is connecting...</div>
+              </motion.div>
             )}
 
             <AgentControlBar

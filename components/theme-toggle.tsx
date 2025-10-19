@@ -49,11 +49,11 @@ export function ApplyThemeScript() {
 }
 
 export function ThemeToggle({ className }: ThemeToggleProps) {
-  const [theme, setTheme] = useState<ThemeMode>('system');
+  const [theme, setTheme] = useState<ThemeMode>('light');
   const [effectiveTheme, setEffectiveTheme] = useState<'light' | 'dark'>('light');
 
   useEffect(() => {
-    const storedTheme = (localStorage.getItem(THEME_STORAGE_KEY) as ThemeMode) ?? 'system';
+    const storedTheme = (localStorage.getItem(THEME_STORAGE_KEY) as ThemeMode) ?? 'light';
     setTheme(storedTheme);
 
     const effTheme =
@@ -70,7 +70,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
   useEffect(() => {
     const handleStorageChange = (e: Event) => {
       if (e instanceof StorageEvent && e.key === THEME_STORAGE_KEY) {
-        const newStoredTheme = e.newValue as ThemeMode;
+        const newStoredTheme = (e.newValue as ThemeMode) ?? 'light';
         if (newStoredTheme) {
           setTheme(newStoredTheme);
           const newEffTheme =
@@ -82,7 +82,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
           setEffectiveTheme(newEffTheme);
         }
       } else if (e instanceof CustomEvent && (e as CustomEvent).detail?.key === THEME_STORAGE_KEY) {
-        const newStoredTheme = e.detail.newValue as ThemeMode;
+        const newStoredTheme = (e.detail.newValue as ThemeMode) ?? 'light';
         if (newStoredTheme) {
           setTheme(newStoredTheme);
           const newEffTheme =

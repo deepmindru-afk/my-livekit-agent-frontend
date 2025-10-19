@@ -199,7 +199,7 @@ export function AgentControlBar({
               aria-label="Toggle chat"
               pressed={chatOpen}
               onPressedChange={setChatOpen}
-              disabled={!isAgentAvailable}
+              disabled={!isAvatarVisible}
               className="aspect-square h-full"
             >
               <ChatTextIcon weight="bold" />

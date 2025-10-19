@@ -124,8 +124,8 @@ export function MediaTiles({ chatOpen }: MediaTilesProps) {
         'pointer-events-none',
         // Mobile: Top center when chat open, fullscreen when closed
         // Desktop: Left center when chat open, fullscreen when closed
-        chatOpen
-          ? 'fixed top-28 left-1/2 z-50 -translate-x-1/2 xl:top-1/2 xl:left-8 xl:translate-x-0 xl:-translate-y-1/2'
+        chatOpen // When chat is open, it's relative on small screens, and fixed on large screens.
+          ? 'relative z-50 lg:fixed lg:top-1/2 lg:left-8 lg:-translate-y-1/2'
           : 'fixed inset-x-0 top-8 bottom-32 z-50 md:top-12 md:bottom-40'
       )}
     >
