@@ -290,9 +290,7 @@ export const SessionView = ({
                         <div
                           className={cn(
                             'flex w-full flex-col gap-1',
-                            message.from?.isLocal
-                              ? 'items-end'
-                              : 'items-start'
+                            message.from?.isLocal ? 'items-end' : 'items-start'
                           )}
                         >
                           <span
@@ -364,12 +362,7 @@ export const SessionView = ({
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{
-                  opacity:
-                    sessionStarted &&
-                    messages.length === 0 && // Only show on first load
-                    !isAvatarVisible // Show until avatar is visible
-                      ? 1
-                      : 0,
+                  opacity: sessionStarted && messages.length === 0 && !isAvatarVisible ? 1 : 0,
                   transition: {
                     ease: 'easeIn',
                     delay: messages.length > 0 ? 0 : 0.5,
@@ -379,9 +372,7 @@ export const SessionView = ({
                 aria-hidden={messages.length > 0}
                 className={cn([
                   'absolute inset-x-0 -top-8 text-center sm:-top-10 md:-top-12',
-                  sessionStarted &&
-                    messages.length === 0 &&
-                    'pointer-events-none', // Keep it from being interactive
+                  sessionStarted && messages.length === 0 && 'pointer-events-none', // Keep it from being interactive
                   'text-black dark:text-white',
                 ])}
               >
