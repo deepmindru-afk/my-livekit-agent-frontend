@@ -7,8 +7,8 @@ import { cn } from '@/lib/utils';
 // (e.g., via fetch to '/api/login' with hashed passwords, JWT tokens, etc.)
 // Never hardcode in client-side code for real apps!
 const VALID_CREDENTIALS = {
-  username: 'admin@10xds.com', // Custom email as username
-  password: 'Abcd@1234', // Custom password
+  username: 'portal', // Custom email as username
+  password: 'portal', // Custom password
 };
 
 interface LoginModalProps {
